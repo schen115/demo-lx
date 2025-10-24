@@ -1114,8 +1114,9 @@
         });
 
         // 内容审核逻辑
-        let modifyCount = 0; // 修改次数计数器（从0开始，但显示时从3开始）
-        const maxModifyCount = 4; // 最大修改次数
+        let runCount = 0; // 运行次数计数器
+        let bGradeModifyCount = 0; // B级修改次数计数器
+        const maxBGradeModifyCount = 3; // B级最大修改次数
 
         // 为运行按钮添加点击事件
         document.getElementById('run-btn').addEventListener('click', function() {
@@ -1127,8 +1128,8 @@
                 return;
             }
             
-            // 每次运行都消耗一次修改机会
-            modifyCount++;
+            // 增加运行次数
+            runCount++;
             
             // 执行内容审核
             performContentReview(content);
@@ -1144,8 +1145,9 @@
             const reviewSection = document.getElementById('content-review-section');
             reviewSection.style.display = 'none';
             
-            // 重置修改次数
-            modifyCount = 0;
+            // 重置计数器
+            runCount = 0;
+            bGradeModifyCount = 0;
         });
 
         // 内容审核函数
@@ -1219,8 +1221,11 @@
             }
             
             if (grade === 'B') {
-                // 如果修改次数已用完，自动进入人工审核
-                if (modifyCount >= maxModifyCount) {
+                // B级内容，增加B级修改次数
+                bGradeModifyCount++;
+                
+                // 如果B级修改次数已达到最大次数，自动进入人工审核
+                if (bGradeModifyCount > maxBGradeModifyCount) {
                     return {
                         grade: 'B',
                         description: '不通过，已进入人工审核',
@@ -1235,7 +1240,7 @@
                     description: '不通过，需要修改',
                     sensitiveHints: sensitiveHints,
                     canModify: true,
-                    modifyCount: modifyCount
+                    modifyCount: bGradeModifyCount
                 };
             }
             
@@ -1283,7 +1288,7 @@
                     modifyCountDiv.textContent = '修改次数已用尽，已自动进入人工审核';
                 } else if (result.canModify) {
                     // 还可以修改
-                    const remainingCount = maxModifyCount - modifyCount;
+                    const remainingCount = maxBGradeModifyCount - bGradeModifyCount + 1;
                     modifyCountDiv.textContent = `剩余修改次数：${remainingCount} 次`;
                 }
                 
@@ -1300,12 +1305,12 @@
                     // 已进入人工审核，显示状态按钮
                     const manualReviewBtn = document.createElement('button');
                     manualReviewBtn.className = 'review-btn danger';
-                    manualReviewBtn.textContent = '已进入人工审核';
+                    manualReviewBtn.textContent = '人工审核';
                     manualReviewBtn.onclick = function() {
                         alert('修改次数已用尽，已自动提交人工审核，请等待审核结果');
                     };
                     reviewActions.appendChild(manualReviewBtn);
-                } else if (result.canModify && modifyCount < maxModifyCount) {
+                } else if (result.canModify && bGradeModifyCount <= maxBGradeModifyCount) {
                     // 还有修改次数，显示重新输入按钮
                     const reinputBtn = document.createElement('button');
                     reinputBtn.className = 'review-btn primary';
@@ -1326,8 +1331,9 @@
                 confirmBtn.textContent = '确认发布';
                 confirmBtn.onclick = function() {
                     alert('内容已提交，进入部门审核流程');
-                    // 重置修改次数
-                    modifyCount = 0;
+                    // 重置计数器
+                    runCount = 0;
+                    bGradeModifyCount = 0;
                 };
                 reviewActions.appendChild(confirmBtn);
             }
