@@ -4,6 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>对外发言审批</title>
+    <!-- 引入Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入Font Awesome图标 -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- 自定义Tailwind配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563eb', // 主色调：蓝色（传递可靠感）
+                        success: '#10b981', // 成功色：绿色
+                        warning: '#f59e0b', // 警示色：橙色（降低饱和度）
+                        danger: '#ef4444',  // 危险色：红色（用于极端错误）
+                        neutral: {
+                            100: '#f3f4f6',
+                            200: '#e5e7eb',
+                            700: '#374151',
+                            800: '#1f2937'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                },
+            }
+        }
+    </script>
+    
+    <!-- 自定义工具类 -->
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .card-shadow {
+                box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 10px -2px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.02);
+            }
+            .review-card-shadow {
+                box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.1), 0 4px 8px -2px rgba(0, 0, 0, 0.06);
+            }
+            .hover-scale {
+                transition: transform 0.2s ease-in-out;
+            }
+            .hover-scale:hover {
+                transform: scale(1.01);
+            }
+        }
+    </style>
     <style>
         * {
             margin: 0;
@@ -571,6 +621,14 @@
         .review-result {
             margin-bottom: 24px;
         }
+        
+        .review-result > div {
+            margin-bottom: 20px;
+        }
+        
+        .review-result > div:last-child {
+            margin-bottom: 0;
+        }
 
         .grade-result {
             display: flex;
@@ -1056,13 +1114,21 @@
                 </div>
 
                 <!-- 内容审核结果区域 -->
-                <div class="content-review-section" id="content-review-section" style="display: none;">
-                    <div class="review-title">内容审核结果</div>
-                    <div class="review-result" id="review-result">
-                        <!-- 审核结果将在这里显示 -->
+                <div class="w-full bg-white rounded-lg card-shadow overflow-hidden mt-6" id="content-review-section" style="display: none;">
+                    <!-- 头部标题栏 -->
+                    <div class="border-b border-neutral-200 px-8 py-6 flex items-center justify-between">
+                        <h2 class="text-xl font-bold text-neutral-800">内容审核结果</h2>
+                        <span class="text-sm text-neutral-700" id="review-timestamp"></span>
                     </div>
-                    <div class="review-actions" id="review-actions">
-                        <!-- 操作按钮将在这里显示 -->
+
+                    <!-- 审核结果模块 -->
+                    <div class="px-8 py-8 space-y-8">
+                        <div id="review-result">
+                            <!-- 审核结果将在这里显示 -->
+                        </div>
+                        <div id="review-actions">
+                            <!-- 操作按钮将在这里显示 -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1155,15 +1221,44 @@
             const reviewSection = document.getElementById('content-review-section');
             const reviewResultElement = document.getElementById('review-result');
             const reviewActions = document.getElementById('review-actions');
+            const reviewTimestamp = document.getElementById('review-timestamp');
             
-            // 显示审核结果区域
+            // 显示审核结果区域，添加动画效果
             reviewSection.style.display = 'block';
+            reviewSection.style.opacity = '0';
+            reviewSection.style.transform = 'translateY(20px)';
+            
+            // 添加淡入动画
+            setTimeout(() => {
+                reviewSection.style.transition = 'all 0.3s ease-out';
+                reviewSection.style.opacity = '1';
+                reviewSection.style.transform = 'translateY(0)';
+            }, 50);
+            
+            // 设置时间戳
+            const now = new Date();
+            const timestamp = now.toLocaleString('zh-CN', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            reviewTimestamp.textContent = timestamp;
             
             // 模拟内容审核逻辑
             const reviewResult = analyzeContent(content);
             
             // 显示审核结果
             displayReviewResult(reviewResult, reviewResultElement, reviewActions);
+            
+            // 滚动到审核结果区域
+            setTimeout(() => {
+                reviewSection.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start' 
+                });
+            }, 100);
         }
 
         // 内容分析函数（模拟审核逻辑）
@@ -1259,40 +1354,122 @@
             reviewResult.innerHTML = '';
             reviewActions.innerHTML = '';
             
-            // 创建等级结果显示
-            const gradeResult = document.createElement('div');
-            gradeResult.className = `grade-result grade-${result.grade.toLowerCase()}`;
-            
-            const gradeLabel = document.createElement('div');
-            gradeLabel.className = 'grade-label';
-            gradeLabel.textContent = `${result.grade}级：${result.description}`;
-            
-            gradeResult.appendChild(gradeLabel);
-            reviewResult.appendChild(gradeResult);
-            
-            // 显示敏感提示（如果有）
-            if (result.sensitiveHints.length > 0) {
-                const sensitiveHint = document.createElement('div');
-                sensitiveHint.className = `sensitive-hint grade-${result.grade.toLowerCase()}`;
-                sensitiveHint.textContent = `敏感提示：${result.sensitiveHints.join('、')}`;
-                reviewResult.appendChild(sensitiveHint);
-            }
-            
-            // 显示修改次数提示（B级内容）
-            if (result.grade === 'B') {
-                const modifyCountDiv = document.createElement('div');
-                modifyCountDiv.className = 'modify-count';
+            if (result.grade === 'A') {
+                // A级：禁止发布
+                const statusCard = document.createElement('div');
+                statusCard.className = 'bg-red-50 border-l-4 border-danger rounded-lg p-6 hover-scale review-card-shadow mb-5';
+                statusCard.innerHTML = `
+                    <div class="flex items-start">
+                        <div class="mr-4 mt-1">
+                            <i class="fa fa-ban text-danger text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-neutral-800">A级：禁止发布</h3>
+                            <p class="text-neutral-700 mt-2 text-base">内容涉及严重违规，禁止发布</p>
+                        </div>
+                    </div>
+                `;
+                reviewResult.appendChild(statusCard);
                 
-                if (result.manualReview) {
-                    // 已进入人工审核
-                    modifyCountDiv.textContent = '修改次数已用尽，已自动进入人工审核';
-                } else if (result.canModify) {
-                    // 还可以修改
-                    const remainingCount = maxBGradeModifyCount - bGradeModifyCount + 1;
-                    modifyCountDiv.textContent = `剩余修改次数：${remainingCount} 次`;
+                // 敏感提示模块
+                if (result.sensitiveHints.length > 0) {
+                    const sensitiveCard = document.createElement('div');
+                    sensitiveCard.className = 'bg-red-50 border-l-4 border-danger rounded-lg p-6 hover-scale review-card-shadow mb-5';
+                    sensitiveCard.innerHTML = `
+                        <div class="flex items-start">
+                            <div class="mr-4 mt-1">
+                                <i class="fa fa-exclamation-triangle text-danger text-2xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-neutral-800">敏感提示</h3>
+                                <p class="text-neutral-700 mt-2 text-base">涉及违规内容：<span class="text-danger font-medium">${result.sensitiveHints.join('</span>、<span class="text-danger font-medium">')}</span></p>
+                            </div>
+                        </div>
+                    `;
+                    reviewResult.appendChild(sensitiveCard);
                 }
                 
-                reviewResult.appendChild(modifyCountDiv);
+            } else if (result.grade === 'B') {
+                // B级：不通过，需要修改
+                const statusCard = document.createElement('div');
+                statusCard.className = 'bg-yellow-50 border-l-4 border-warning rounded-lg p-6 hover-scale review-card-shadow mb-5';
+                statusCard.innerHTML = `
+                    <div class="flex items-start">
+                        <div class="mr-4 mt-1">
+                            <i class="fa fa-exclamation-triangle text-warning text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-neutral-800">B级：不通过，需要修改</h3>
+                            <p class="text-neutral-700 mt-2 text-base">请根据下方提示调整内容后重新提交</p>
+                        </div>
+                    </div>
+                `;
+                reviewResult.appendChild(statusCard);
+                
+                // 敏感提示模块
+                if (result.sensitiveHints.length > 0) {
+                    const sensitiveCard = document.createElement('div');
+                    sensitiveCard.className = 'bg-orange-50 border-l-4 border-warning rounded-lg p-6 hover-scale review-card-shadow mb-5';
+                    sensitiveCard.innerHTML = `
+                        <div class="flex items-start">
+                            <div class="mr-4 mt-1">
+                                <i class="fa fa-bell text-warning text-2xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-neutral-800">敏感提示</h3>
+                                <p class="text-neutral-700 mt-2 text-base">涉及违规内容：<span class="text-warning font-medium">${result.sensitiveHints.join('</span>、<span class="text-warning font-medium">')}</span></p>
+                            </div>
+                        </div>
+                    `;
+                    reviewResult.appendChild(sensitiveCard);
+                }
+                
+                // 剩余次数模块
+                const countCard = document.createElement('div');
+                countCard.className = 'bg-neutral-50 border-l-4 border-primary rounded-lg p-6 hover-scale review-card-shadow';
+                
+                if (result.manualReview) {
+                    countCard.innerHTML = `
+                        <div class="flex items-center">
+                            <div class="mr-4">
+                                <i class="fa fa-clock-o text-primary text-2xl"></i>
+                            </div>
+                            <div>
+                                <p class="text-neutral-700 text-base">修改次数已用尽，已自动进入人工审核</p>
+                            </div>
+                        </div>
+                    `;
+                } else if (result.canModify) {
+                    const remainingCount = maxBGradeModifyCount - bGradeModifyCount + 1;
+                    countCard.innerHTML = `
+                        <div class="flex items-center">
+                            <div class="mr-4">
+                                <i class="fa fa-refresh text-primary text-2xl"></i>
+                            </div>
+                            <div>
+                                <p class="text-neutral-700 text-base">剩余修改次数：<span class="text-primary font-bold text-xl">${remainingCount} 次</span></p>
+                            </div>
+                        </div>
+                    `;
+                }
+                reviewResult.appendChild(countCard);
+                
+            } else if (result.grade === 'C') {
+                // C级：可发布
+                const statusCard = document.createElement('div');
+                statusCard.className = 'bg-green-50 border-l-4 border-success rounded-lg p-6 hover-scale review-card-shadow mb-5';
+                statusCard.innerHTML = `
+                    <div class="flex items-start">
+                        <div class="mr-4 mt-1">
+                            <i class="fa fa-check-circle text-success text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-neutral-800">C级：可发布</h3>
+                            <p class="text-neutral-700 mt-2 text-base">内容符合规范，可以发布</p>
+                        </div>
+                    </div>
+                `;
+                reviewResult.appendChild(statusCard);
             }
             
             // 显示操作按钮
@@ -1304,8 +1481,8 @@
                 if (result.manualReview) {
                     // 已进入人工审核，显示状态按钮
                     const manualReviewBtn = document.createElement('button');
-                    manualReviewBtn.className = 'review-btn danger';
-                    manualReviewBtn.textContent = '人工审核';
+                    manualReviewBtn.className = 'bg-danger hover:bg-danger/90 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 flex items-center justify-center hover-scale';
+                    manualReviewBtn.innerHTML = '<i class="fa fa-clock-o mr-2"></i>人工审核';
                     manualReviewBtn.onclick = function() {
                         alert('修改次数已用尽，已自动提交人工审核，请等待审核结果');
                     };
@@ -1313,8 +1490,8 @@
                 } else if (result.canModify && bGradeModifyCount <= maxBGradeModifyCount) {
                     // 还有修改次数，显示重新输入按钮
                     const reinputBtn = document.createElement('button');
-                    reinputBtn.className = 'review-btn primary';
-                    reinputBtn.textContent = '重新输入';
+                    reinputBtn.className = 'bg-primary hover:bg-primary/90 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 flex items-center justify-center hover-scale';
+                    reinputBtn.innerHTML = '<i class="fa fa-edit mr-2"></i>重新输入';
                     reinputBtn.onclick = function() {
                         // 清空输入框，让用户重新输入
                         document.querySelector('.text-input-area').value = '';
@@ -1327,8 +1504,8 @@
             } else if (result.grade === 'C') {
                 // C级：显示确认发布按钮
                 const confirmBtn = document.createElement('button');
-                confirmBtn.className = 'review-btn success';
-                confirmBtn.textContent = '确认发布';
+                confirmBtn.className = 'bg-success hover:bg-success/90 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 flex items-center justify-center hover-scale';
+                confirmBtn.innerHTML = '<i class="fa fa-check mr-2"></i>确认发布';
                 confirmBtn.onclick = function() {
                     alert('内容已提交，进入部门审核流程');
                     // 重置计数器
