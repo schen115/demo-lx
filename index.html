@@ -948,15 +948,6 @@
             </div>
 
             <div class="guidelines">
-                <div class="guidelines-text">
-                    请您在对外发言时牢记:
-                </div>
-                <ol>
-                    <li>不涉政：不评论政策、法规、政府部门及国企;</li>
-                    <li>不涉敏：不提及敏感数据及美国政府关心的话题（如：AI、芯片）;</li>
-                    <li>不涉密：不公开所有未对外部媒介发布的信息（如保密车型信息、未公开的财务数据及销量、产线产量规划等）;</li>
-                    <li>不违法：不攻击竞品，不搞垄断（如：价格联盟）</li>
-                </ol>
                 <div class="guidelines-links">
                     <div class="guidelines-links-text">详细内容请点击:</div>
                     <div class="guidelines-links-container">
@@ -1010,7 +1001,7 @@
                             <label class="form-label">
                                 <span class="required">*</span>发言人
                             </label>
-                            <input type="text" class="form-input" placeholder="请选择">
+                            <input type="text" class="form-input" id="speaker-input" placeholder="请选择">
                         </div>
                         <div class="form-group">
                             <label class="form-label">
@@ -1089,12 +1080,12 @@
                         </label>
                         <div class="radio-group">
                             <div class="radio-item">
-                                <input type="radio" id="external-report-yes" name="external-report" value="yes">
-                                <label for="external-report-yes">是</label>
+                                <input type="radio" id="external-speech-yes" name="external-speech" value="yes">
+                                <label for="external-speech-yes">是</label>
                             </div>
                             <div class="radio-item">
-                                <input type="radio" id="external-report-no" name="external-report" value="no">
-                                <label for="external-report-no">否</label>
+                                <input type="radio" id="external-speech-no" name="external-speech" value="no">
+                                <label for="external-speech-no">否</label>
                             </div>
                         </div>
                         <div class="explanation red-text">
@@ -2619,16 +2610,16 @@
                 confirmBtn.className = 'bg-success hover:bg-success/90 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 flex items-center justify-center hover-scale';
                 confirmBtn.innerHTML = '<i class="fa fa-check mr-2"></i>确认发布';
                 confirmBtn.onclick = function() {
-                    // 获取受访人输入框的值
-                    const intervieweeInput = document.getElementById('interviewee-input');
-                    const intervieweeValue = intervieweeInput ? intervieweeInput.value.trim() : '';
+                    // 获取发言人输入框的值
+                    const speakerInput = document.getElementById('speaker-input');
+                    const speakerValue = speakerInput ? speakerInput.value.trim() : '';
                     const reviewGrade = result.grade === 'C';
                     
-                    // 判断条件：受访人输入框值为"t1"且内审审核结果为"C级：可发布"
-                    if (intervieweeValue === 't1' && reviewGrade) {
+                    // 判断条件：发言人输入框值为"t1"且内审审核结果为"C级：可发布"
+                    if (speakerValue === 't1' && reviewGrade) {
                         alert('内容已提交，已进入公关部审核流程');
                     } else {
-                        alert('内容已提交，进入部门审核流程');
+                        alert('内容已提交，已进入部门流程');
                     }
                     // 重置计数器
                     externalSpeechRunCount = 0;
