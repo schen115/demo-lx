@@ -142,6 +142,26 @@
             color: #40a9ff;
         }
 
+        .guidelines-links {
+            margin-top: 10px;
+        }
+
+        .guidelines-links-text {
+            font-size: 12px;
+            color: #333;
+            margin-bottom: 6px;
+        }
+
+        .guidelines-links-container {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .guidelines-links-container a {
+            display: block;
+        }
+
         .form-container {
             display: flex;
             flex-direction: column;
@@ -175,6 +195,25 @@
             color: #333333;
             display: flex;
             align-items: center;
+        }
+
+        /* 问卷标题样式 */
+        .questionnaire-title-label {
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .questionnaire-category-label {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .category-example-inline {
+            font-size: 12px;
+            font-weight: 400;
+            color: #999999;
+            margin-left: 6px;
         }
 
         .required {
@@ -340,6 +379,10 @@
             gap: 8px;
         }
 
+        .upload-section .form-label {
+            margin-bottom: 8px;
+        }
+
         .upload-btn {
             display: inline-flex;
             align-items: center;
@@ -403,11 +446,6 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
-        }
-        
-        /* 个人发言表单样式 */
-        .personal-speech-form {
-            margin-top: 22px;
         }
         
         /* 强制隐藏样式 */
@@ -820,6 +858,95 @@
         </div>
 
         <div class="main-content">
+            <!-- 自测问卷区域 -->
+            <div class="form-container" style="margin-bottom: 30px;">
+                <div class="form-group">
+                    <label class="form-label questionnaire-title-label">
+                        请勾选是否涉及以下敏感对外发言内容：
+                    </label>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label questionnaire-category-label">
+                        企业经营类<span class="category-example-inline">（如组织架构变动、公司排产计划、往期敏感事件）</span>
+                    </label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="business-yes" name="business-involved" value="yes">
+                            <label for="business-yes">是</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="business-no" name="business-involved" value="no">
+                            <label for="business-no">否</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label questionnaire-category-label">
+                        产品营销类<span class="category-example-inline">（如贬低其他品牌、涉及官方未发布的产品或技术信息）</span>
+                    </label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="product-yes" name="product-involved" value="yes">
+                            <label for="product-yes">是</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="product-no" name="product-involved" value="no">
+                            <label for="product-no">否</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label questionnaire-category-label">
+                        销售政策类<span class="category-example-inline">（如 非合规范围内的销售政策）</span>
+                    </label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="sales-yes" name="sales-involved" value="yes">
+                            <label for="sales-yes">是</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="sales-no" name="sales-involved" value="no">
+                            <label for="sales-no">否</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label questionnaire-category-label">
+                        热点话题类<span class="category-example-inline">（如 涉政、敏感人物、违法行为、歧视性用语、网络违规用语）</span>
+                    </label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="hot-topics-yes" name="hot-topics-involved" value="yes">
+                            <label for="hot-topics-yes">是</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="hot-topics-no" name="hot-topics-involved" value="no">
+                            <label for="hot-topics-no">否</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label questionnaire-category-label">
+                        其他类<span class="category-example-inline">（如谈论薪资、抨击消费者）</span>
+                    </label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="other-yes" name="other-involved" value="yes">
+                            <label for="other-yes">是</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="other-no" name="other-involved" value="no">
+                            <label for="other-no">否</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="guidelines">
                 <div class="guidelines-text">
                     请您在对外发言时牢记:
@@ -830,9 +957,13 @@
                     <li>不涉密：不公开所有未对外部媒介发布的信息（如保密车型信息、未公开的财务数据及销量、产线产量规划等）;</li>
                     <li>不违法：不攻击竞品，不搞垄断（如：价格联盟）</li>
                 </ol>
-                <a href="#">详细内容请点击: 对外发言人高危风险细则</a>
-                <br><br>
-                <a href="#">理想汽车新闻发言人规范</a>
+                <div class="guidelines-links">
+                    <div class="guidelines-links-text">详细内容请点击:</div>
+                    <div class="guidelines-links-container">
+                        <a href="#">对外发言人高危风险细则</a>
+                        <a href="#">理想汽车新闻发言人规范</a>
+                    </div>
+                </div>
             </div>
 
             <!-- 类型选择区域 -->
@@ -843,11 +974,7 @@
                     </label>
                     <div class="radio-group">
                         <div class="radio-item">
-                            <input type="radio" id="personal-speech" name="type" value="personal-speech" checked>
-                            <label for="personal-speech">员工个人社交平台发布</label>
-                        </div>
-                        <div class="radio-item">
-                            <input type="radio" id="media" name="type" value="media">
+                            <input type="radio" id="media" name="type" value="media" checked>
                             <label for="media">媒体采访</label>
                         </div>
                         <div class="radio-item">
@@ -863,20 +990,16 @@
                 <div class="form-container">
                     <div class="form-group">
                         <label class="form-label">
-                            <span class="required">*</span>内容形式
+                            <span class="required">*</span>发言形式
                         </label>
                         <div class="radio-group">
                             <div class="radio-item">
-                                <input type="radio" id="external-content-ppt" name="external-content-format" value="ppt">
-                                <label for="external-content-ppt">PPT/Keynote</label>
+                                <input type="radio" id="external-content-ppt" name="external-content-format" value="ppt/video">
+                                <label for="external-content-ppt">PPT/Keynote/视频</label>
                             </div>
                             <div class="radio-item">
                                 <input type="radio" id="external-content-text-image" name="external-content-format" value="text-image">
                                 <label for="external-content-text-image">文字</label>
-                            </div>
-                            <div class="radio-item">
-                                <input type="radio" id="external-content-video" name="external-content-format" value="video">
-                                <label for="external-content-video">视频</label>
                             </div>
                         </div>
                     </div>
@@ -962,7 +1085,26 @@
 
                     <div class="form-group">
                         <label class="form-label">
-                            <span class="required">*</span>是否发言
+                            <span class="required">*</span>是否有发言
+                        </label>
+                        <div class="radio-group">
+                            <div class="radio-item">
+                                <input type="radio" id="external-report-yes" name="external-report" value="yes">
+                                <label for="external-report-yes">是</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="external-report-no" name="external-report" value="no">
+                                <label for="external-report-no">否</label>
+                            </div>
+                        </div>
+                        <div class="explanation red-text">
+                            发言包括（1）演讲、授课;（2）接受媒体采访,包含但不限于书面、电话和视频采访
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span class="required">*</span>是否有讲稿
                         </label>
                         <div class="radio-group">
                             <div class="radio-item">
@@ -973,9 +1115,6 @@
                                 <input type="radio" id="external-speak-no" name="external-speak" value="no">
                                 <label for="external-speak-no">否</label>
                             </div>
-                        </div>
-                        <div class="explanation red-text">
-                            发言包括（1）演讲、授课;（2）接受媒体采访,包含但不限于书面、电话和视频采访
                         </div>
                     </div>
 
@@ -1002,7 +1141,7 @@
                         </button>
                         <div class="upload-instructions">
                             <div>最大支持上传30个文件,单个文件大小不超过100MB</div>
-                            <br><br>
+                            <br>
                             <div class="red-text">邀请函、会议介绍、发言稿、发言PPT或Keynote等</div>
                         </div>
                     </div>
@@ -1073,13 +1212,9 @@
                 <div class="form-container">
                     <div class="form-group">
                         <label class="form-label">
-                            <span class="required">*</span>内容形式
+                            <span class="required">*</span>采访形式
                         </label>
                         <div class="radio-group">
-                            <div class="radio-item">
-                                <input type="radio" id="content-ppt" name="content-format" value="ppt">
-                                <label for="content-ppt">PPT/Keynote</label>
-                            </div>
                             <div class="radio-item">
                                 <input type="radio" id="content-text-image" name="content-format" value="text-image">
                                 <label for="content-text-image">文字</label>
@@ -1096,7 +1231,7 @@
                             <label class="form-label">
                                 <span class="required">*</span>受访人
                             </label>
-                            <input type="text" class="form-input" placeholder="请选择">
+                            <input type="text" id="interviewee-input" class="form-input" placeholder="请选择">
                         </div>
                         <div class="form-group">
                             <label class="form-label">
@@ -1147,21 +1282,65 @@
                         </div>
                     </div>
                     
-                    <div class="form-row">
+                    <!-- 文字形式的提纲选项 -->
+                    <div class="form-row" id="text-outline-section" style="display: none;">
                         <div class="form-group">
                             <label class="form-label">
-                                <span class="required">*</span>是否已有提纲
+                                <span class="required">*</span>是否有提纲
                             </label>
                             <div class="radio-group">
                                 <div class="radio-item">
-                                    <input type="radio" id="speak-media-yes" name="speak-media" value="yes">
-                                    <label for="speak-media-yes">是</label>
+                                    <input type="radio" id="text-outline-yes" name="text-outline" value="yes">
+                                    <label for="text-outline-yes">是</label>
                                 </div>
                                 <div class="radio-item">
-                                    <input type="radio" id="speak-media-no" name="speak-media" value="no">
-                                    <label for="speak-media-no">否</label>
+                                    <input type="radio" id="text-outline-no" name="text-outline" value="no">
+                                    <label for="text-outline-no">否</label>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- 视频形式的脚本选项 -->
+                    <div class="form-row" id="video-script-section" style="display: none;">
+                        <div class="form-group">
+                            <label class="form-label">
+                                <span class="required">*</span>是否有采访脚本
+                            </label>
+                            <div class="radio-group">
+                                <div class="radio-item">
+                                    <input type="radio" id="video-script-yes" name="video-script" value="yes">
+                                    <label for="video-script-yes">是</label>
+                                </div>
+                                <div class="radio-item">
+                                    <input type="radio" id="video-script-no" name="video-script" value="no">
+                                    <label for="video-script-no">否</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 文字形式-否：附件上传组件 -->
+                    <div class="upload-section" id="text-outline-attachment-section" style="display: none;">
+                        <label class="form-label">附件上传</label>
+                        <button type="button" class="upload-btn">
+                            点击上传
+                        </button>
+                        <div class="upload-instructions">
+                            <div>最大支持上传20个文件,单个文件大小不超过100MB</div>
+                        </div>
+                    </div>
+
+                    <!-- 视频形式-否：附件上传组件 -->
+                    <div class="upload-section" id="video-script-attachment-section" style="display: none;">
+                        <label class="form-label">附件</label>
+                        <button type="button" class="upload-btn">
+                            点击上传
+                        </button>
+                        <div class="upload-instructions">
+                            <div>最大支持上传30个文件,单个文件大小不超过100MB</div>
+                            <br><br>
+                            <div class="red-text">请上传附件</div>
                         </div>
                     </div>
 
@@ -1225,131 +1404,7 @@
                     </div> 
                 </div>
             </div>
-
-            <!-- 个人发言表单 -->
-            <div class="personal-speech-form" id="personal-speech-form">
-                 <div class="form-container">
-                    <div class="form-group">
-                        <label class="form-label">
-                            <span class="required">*</span>内容形式
-                        </label>
-                        <div class="radio-group">
-                            <div class="radio-item">
-                                <input type="radio" id="personal-content-ppt" name="personal-content-format" value="ppt">
-                                <label for="personal-content-ppt">PPT/Keynote</label>
-                            </div>
-                            <div class="radio-item">
-                                <input type="radio" id="personal-content-text-image" name="personal-content-format" value="text-image">
-                                <label for="personal-content-text-image">文字</label>
-                            </div>
-                            <div class="radio-item">
-                                <input type="radio" id="personal-content-video" name="personal-content-format" value="video">
-                                <label for="personal-content-video">视频</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">
-                                <span class="required">*</span>发言人
-                            </label>
-                            <input type="text" class="form-input" placeholder="请输入">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">
-                                <span class="required">*</span>发言人部门
-                            </label>
-                            <input type="text" class="form-input" placeholder="请输入">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">
-                                <span class="required">*</span>发布平台
-                            </label>
-                            <select class="form-input" style="cursor: pointer;">
-                                <option value="">请选择发布平台</option>
-                                <option value="wechat-public">微信公众号</option>
-                                <option value="wechat-video">微信视频号</option>
-                                <option value="bilibili">b站</option>
-                                <option value="xiaohongshu">小红书</option>
-                                <option value="weibo">微博</option>
-                                <option value="douyin">抖音</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">
-                                <span class="required">*</span>社媒账号链接
-                            </label>
-                            <input type="url" class="form-input" placeholder="请输入">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 文本输入区域 -->
-                <div class="text-input-section">
-                    <div class="text-input-title">输入信息</div>
-                    <div class="text-input-container">
-                        <textarea class="text-input-area" id="personal-speech-textarea" placeholder="请输入要发布的内容..."></textarea>
-                    </div>
-
-                    <!-- 图片上传区域 -->
-                    <div class="image-upload-section">
-                        <div class="image-upload-buttons">
-                            <button type="button" class="image-upload-btn" id="local-upload-btn">
-                                <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                    <polyline points="17,14 12,9 7,14"></polyline>
-                                    <line x1="12" y1="9" x2="12" y2="21"></line>
-                                </svg>
-                                从本地上传
-                            </button>
-                            <button type="button" class="image-upload-btn" id="link-upload-btn">
-                                <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-                                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-                                </svg>
-                                粘贴文件链接
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- 操作按钮 -->
-                    <div class="action-buttons">
-                        <button type="button" class="clear-btn" id="clear-btn">清空</button>
-                        <button type="button" class="run-btn" id="run-btn">
-                            <svg class="run-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polygon points="5,3 19,12 5,21"></polygon>
-                            </svg>
-                            运行
-                        </button>
-                    </div>
-                </div>
-
-                <!-- 内容审核结果区域 -->
-                <div class="w-full bg-white rounded-lg card-shadow overflow-hidden mt-6" id="content-review-section" style="display: none;">
-                    <!-- 头部标题栏 -->
-                    <div class="border-b border-neutral-200 px-8 py-6 flex items-center justify-between">
-                        <h2 class="text-xl font-bold text-neutral-800">内容审核结果</h2>
-                        <span class="text-sm text-neutral-700" id="review-timestamp"></span>
-                    </div>
-
-                    <!-- 审核结果模块 -->
-                    <div class="px-8 py-8 space-y-8">
-                        <div id="review-result">
-                            <!-- 审核结果将在这里显示 -->
-                        </div>
-                        <div id="review-actions">
-                            <!-- 操作按钮将在这里显示 -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </div>
-
     </div>
 
     <script>
@@ -1359,34 +1414,25 @@
             const typeRadios = document.querySelectorAll('input[name="type"]');
             const externalSpeechForm = document.getElementById('external-speech-form');
             const mediaInterviewForm = document.getElementById('media-interview-form');
-            const personalSpeechForm = document.getElementById('personal-speech-form');
             const typeSelectionSection = document.querySelector('.type-selection-section');
 
             // 初始化表单显示状态
             function initializeFormDisplay() {
-                // 默认显示个人发言表单（因为personal-speech被设置为checked）
-                personalSpeechForm.style.display = 'block';
+                // 默认显示媒体采访表单（因为媒体采访被设置为checked）
+                mediaInterviewForm.style.display = 'block';
                 externalSpeechForm.style.display = 'none';
-                mediaInterviewForm.style.display = 'none'; // 初始隐藏媒体采访表单
             }
 
             // 切换表单显示
             function toggleFormDisplay(selectedType) {
-                if (selectedType === 'personal-speech') {
-                    // 显示个人发言表单
-                    personalSpeechForm.style.display = 'block';
-                    externalSpeechForm.style.display = 'none';
-                    mediaInterviewForm.style.display = 'none'; // 切换到个人发言时隐藏媒体采访表单
-                } else if (selectedType === 'media') {
+                if (selectedType === 'media') {
                     // 显示媒体采访表单
-                    personalSpeechForm.style.display = 'none';
-                    externalSpeechForm.style.display = 'none';
                     mediaInterviewForm.style.display = 'block';
-                } else {
-                    // 显示对外发言表单（对外发言和论文都使用同一个表单）
-                    personalSpeechForm.style.display = 'none';
+                    externalSpeechForm.style.display = 'none';
+                } else if (selectedType === 'external-speech') {
+                    // 显示对外发言表单
                     externalSpeechForm.style.display = 'block';
-                    mediaInterviewForm.style.display = 'none'; // 切换到对外发言时隐藏媒体采访表单
+                    mediaInterviewForm.style.display = 'none';
                 }
             }
 
@@ -1402,14 +1448,62 @@
             // 初始化表单显示
             initializeFormDisplay();
 
-            // 媒体采访提纲AI模型事件监听
-            const speakMediaRadios = document.querySelectorAll('input[name="speak-media"]');
+            // 采访形式条件逻辑
+            const contentFormatRadios = document.querySelectorAll('input[name="content-format"]');
+            const textOutlineSection = document.getElementById('text-outline-section');
+            const videoScriptSection = document.getElementById('video-script-section');
+            const textOutlineAttachmentSection = document.getElementById('text-outline-attachment-section');
+            const videoScriptAttachmentSection = document.getElementById('video-script-attachment-section');
             const mediaOutlineAISection = document.getElementById('media-outline-ai-section');
-            
-            speakMediaRadios.forEach(radio => {
+
+            // 处理采访形式选择变化
+            function handleContentFormatChange(selectedFormat) {
+                // 先隐藏所有相关组件
+                textOutlineSection.style.display = 'none';
+                videoScriptSection.style.display = 'none';
+                textOutlineAttachmentSection.style.display = 'none';
+                videoScriptAttachmentSection.style.display = 'none';
+                mediaOutlineAISection.style.display = 'none';
+                
+                // 重置所有单选按钮
+                document.querySelectorAll('input[name="text-outline"]').forEach(radio => radio.checked = false);
+                document.querySelectorAll('input[name="video-script"]').forEach(radio => radio.checked = false);
+                
+                // 隐藏审核结果区域
+                const reviewSection = document.getElementById('media-outline-review-section');
+                if (reviewSection) {
+                    reviewSection.style.display = 'none';
+                }
+                // 重置计数器
+                mediaOutlineRunCount = 0;
+                mediaOutlineBGradeModifyCount = 0;
+
+                // 根据选择显示相应的单选组
+                if (selectedFormat === 'text-image') {
+                    // 文字形式：显示"是否有提纲"单选组
+                    textOutlineSection.style.display = 'block';
+                } else if (selectedFormat === 'video') {
+                    // 视频形式：显示"是否有采访脚本？"单选组
+                    videoScriptSection.style.display = 'block';
+                }
+            }
+
+            // 为采访形式单选按钮添加事件监听
+            contentFormatRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.checked) {
+                        handleContentFormatChange(this.value);
+                    }
+                });
+            });
+
+            // 文字形式-是否有提纲事件监听
+            const textOutlineRadios = document.querySelectorAll('input[name="text-outline"]');
+            textOutlineRadios.forEach(radio => {
                 radio.addEventListener('change', function() {
                     if (this.value === 'yes' && this.checked) {
-                        // 显示AI模型弹窗
+                        // 选择"是"：显示AI输入框，隐藏附件上传
+                        textOutlineAttachmentSection.style.display = 'none';
                         mediaOutlineAISection.style.display = 'block';
                         // 添加淡入动画
                         mediaOutlineAISection.style.opacity = '0';
@@ -1419,12 +1513,63 @@
                             mediaOutlineAISection.style.opacity = '1';
                             mediaOutlineAISection.style.transform = 'translateY(0)';
                         }, 50);
-                    } else {
-                        // 隐藏AI模型弹窗
+                    } else if (this.value === 'no' && this.checked) {
+                        // 选择"否"：显示附件上传组件，隐藏AI输入框
                         mediaOutlineAISection.style.display = 'none';
+                        textOutlineAttachmentSection.style.display = 'block';
+                        // 添加淡入动画
+                        textOutlineAttachmentSection.style.opacity = '0';
+                        textOutlineAttachmentSection.style.transform = 'translateY(20px)';
+                        setTimeout(() => {
+                            textOutlineAttachmentSection.style.transition = 'all 0.3s ease-out';
+                            textOutlineAttachmentSection.style.opacity = '1';
+                            textOutlineAttachmentSection.style.transform = 'translateY(0)';
+                        }, 50);
                         // 同时隐藏审核结果区域
                         const reviewSection = document.getElementById('media-outline-review-section');
-                        reviewSection.style.display = 'none';
+                        if (reviewSection) {
+                            reviewSection.style.display = 'none';
+                        }
+                        // 重置计数器
+                        mediaOutlineRunCount = 0;
+                        mediaOutlineBGradeModifyCount = 0;
+                    }
+                });
+            });
+
+            // 视频形式-是否有采访脚本事件监听
+            const videoScriptRadios = document.querySelectorAll('input[name="video-script"]');
+            videoScriptRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.value === 'yes' && this.checked) {
+                        // 选择"是"：显示AI输入框，隐藏附件上传
+                        videoScriptAttachmentSection.style.display = 'none';
+                        mediaOutlineAISection.style.display = 'block';
+                        // 添加淡入动画
+                        mediaOutlineAISection.style.opacity = '0';
+                        mediaOutlineAISection.style.transform = 'translateY(20px)';
+                        setTimeout(() => {
+                            mediaOutlineAISection.style.transition = 'all 0.3s ease-out';
+                            mediaOutlineAISection.style.opacity = '1';
+                            mediaOutlineAISection.style.transform = 'translateY(0)';
+                        }, 50);
+                    } else if (this.value === 'no' && this.checked) {
+                        // 选择"否"：显示附件上传组件，隐藏AI输入框
+                        mediaOutlineAISection.style.display = 'none';
+                        videoScriptAttachmentSection.style.display = 'block';
+                        // 添加淡入动画
+                        videoScriptAttachmentSection.style.opacity = '0';
+                        videoScriptAttachmentSection.style.transform = 'translateY(20px)';
+                        setTimeout(() => {
+                            videoScriptAttachmentSection.style.transition = 'all 0.3s ease-out';
+                            videoScriptAttachmentSection.style.opacity = '1';
+                            videoScriptAttachmentSection.style.transform = 'translateY(0)';
+                        }, 50);
+                        // 同时隐藏审核结果区域
+                        const reviewSection = document.getElementById('media-outline-review-section');
+                        if (reviewSection) {
+                            reviewSection.style.display = 'none';
+                        }
                         // 重置计数器
                         mediaOutlineRunCount = 0;
                         mediaOutlineBGradeModifyCount = 0;
@@ -1502,54 +1647,6 @@
         // 对外发言AI模型相关变量
         let externalSpeechRunCount = 0; // 对外发言运行次数计数器
         let externalSpeechBGradeModifyCount = 0; // 对外发言B级修改次数计数器
-
-        // 为运行按钮添加点击事件
-        document.getElementById('run-btn').addEventListener('click', function() {
-            // 根据当前显示的表单选择正确的textarea
-            let textInput;
-            const personalSpeechForm = document.getElementById('personal-speech-form');
-            const externalSpeechForm = document.getElementById('external-speech-form');
-            const mediaInterviewForm = document.getElementById('media-interview-form');
-            
-            if (personalSpeechForm.style.display !== 'none') {
-                textInput = document.getElementById('personal-speech-textarea');
-            } else if (externalSpeechForm.style.display !== 'none') {
-                textInput = document.getElementById('external-speech-textarea');
-            } else if (mediaInterviewForm.style.display !== 'none') {
-                textInput = document.getElementById('media-outline-textarea');
-            } else {
-                // 回退到原来的选择方式
-                textInput = document.querySelector('.text-input-area');
-            }
-            
-            const content = textInput.value.trim();
-            
-            if (!content) {
-                alert('请输入要发布的内容');
-                return;
-            }
-            
-            // 增加运行次数
-            runCount++;
-            
-            // 执行内容审核
-            performContentReview(content);
-        });
-
-        // 为清空按钮添加点击事件
-        document.getElementById('clear-btn').addEventListener('click', function() {
-            const textInput = document.querySelector('.text-input-area');
-            textInput.value = '';
-            textInput.focus();
-            
-            // 同时隐藏审核结果区域
-            const reviewSection = document.getElementById('content-review-section');
-            reviewSection.style.display = 'none';
-            
-            // 重置计数器
-            runCount = 0;
-            bGradeModifyCount = 0;
-        });
 
         // 媒体采访提纲运行按钮事件监听
         document.getElementById('media-outline-run-btn').addEventListener('click', function() {
@@ -2166,7 +2263,17 @@
                 confirmBtn.className = 'bg-success hover:bg-success/90 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 flex items-center justify-center hover-scale';
                 confirmBtn.innerHTML = '<i class="fa fa-check mr-2"></i>确认发布';
                 confirmBtn.onclick = function() {
-                    alert('内容已提交，进入部门审核流程');
+                    // 获取受访人输入框的值
+                    const intervieweeInput = document.getElementById('interviewee-input');
+                    const intervieweeValue = intervieweeInput ? intervieweeInput.value.trim() : '';
+                    const reviewGrade = result.grade === 'C';
+                    
+                    // 判断条件：受访人输入框值为"t1"且内审审核结果为"C级：可发布"
+                    if (intervieweeValue === 't1' && reviewGrade) {
+                        alert('内容已提交，已进入公关部审核流程');
+                    } else {
+                        alert('内容已提交，进入部门审核流程');
+                    }
                     // 重置计数器
                     runCount = 0;
                     bGradeModifyCount = 0;
@@ -2334,7 +2441,17 @@
                 confirmBtn.className = 'bg-success hover:bg-success/90 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 flex items-center justify-center hover-scale';
                 confirmBtn.innerHTML = '<i class="fa fa-check mr-2"></i>确认发布';
                 confirmBtn.onclick = function() {
-                    alert('内容已提交，进入部门审核流程');
+                    // 获取受访人输入框的值
+                    const intervieweeInput = document.getElementById('interviewee-input');
+                    const intervieweeValue = intervieweeInput ? intervieweeInput.value.trim() : '';
+                    const reviewGrade = result.grade === 'C';
+                    
+                    // 判断条件：受访人输入框值为"t1"且内审审核结果为"C级：可发布"
+                    if (intervieweeValue === 't1' && reviewGrade) {
+                        alert('内容已提交，已进入公关部审核流程');
+                    } else {
+                        alert('内容已提交，进入部门审核流程');
+                    }
                     // 重置计数器
                     mediaOutlineRunCount = 0;
                     mediaOutlineBGradeModifyCount = 0;
@@ -2502,7 +2619,17 @@
                 confirmBtn.className = 'bg-success hover:bg-success/90 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 flex items-center justify-center hover-scale';
                 confirmBtn.innerHTML = '<i class="fa fa-check mr-2"></i>确认发布';
                 confirmBtn.onclick = function() {
-                    alert('内容已提交，进入部门审核流程');
+                    // 获取受访人输入框的值
+                    const intervieweeInput = document.getElementById('interviewee-input');
+                    const intervieweeValue = intervieweeInput ? intervieweeInput.value.trim() : '';
+                    const reviewGrade = result.grade === 'C';
+                    
+                    // 判断条件：受访人输入框值为"t1"且内审审核结果为"C级：可发布"
+                    if (intervieweeValue === 't1' && reviewGrade) {
+                        alert('内容已提交，已进入公关部审核流程');
+                    } else {
+                        alert('内容已提交，进入部门审核流程');
+                    }
                     // 重置计数器
                     externalSpeechRunCount = 0;
                     externalSpeechBGradeModifyCount = 0;
