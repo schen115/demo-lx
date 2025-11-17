@@ -1787,13 +1787,13 @@
                 'B级': ['最好', '最厉害', '行业对比', '极端词']
             };
             
-            let grade = 'C'; // 默认C级
+            let isApproved = true; // 默认可发布
             let sensitiveHints = [];
             
             // 检查A级敏感词
             for (let word of sensitiveWords['A级']) {
                 if (content.includes(word)) {
-                    grade = 'A';
+                    isApproved = false;
                     // 根据具体敏感词类型设置提示
                     if (['长安街', '展销'].includes(word)) {
                         sensitiveHints.push('涉政敏感');
@@ -1811,35 +1811,16 @@
                 }
             }
             
-            // 如果已经是A级，直接返回
-            if (grade === 'A') {
-                return {
-                    grade: 'A',
-                    description: '禁止发布',
-                    sensitiveHints: sensitiveHints,
-                    canModify: false
-                };
-            }
-            
-            // 检查B级敏感词
-            for (let word of sensitiveWords['B级']) {
-                if (content.includes(word)) {
-                    grade = 'B';
-                    sensitiveHints.push('极端词');
-                    sensitiveHints.push('行业对比');
-                    break;
-                }
-            }
-            
-            if (grade === 'B') {
-                // B级内容，增加B级修改次数
+            // 如果已经检测到A级敏感词，需要修改
+            if (!isApproved) {
+                // 增加修改次数
                 bGradeModifyCount++;
                 
-                // 如果B级修改次数已达到最大次数，自动进入人工审核
+                // 如果修改次数已达到最大次数，自动进入人工审核
                 if (bGradeModifyCount > maxBGradeModifyCount) {
                     return {
-                        grade: 'B',
-                        description: '不通过，已进入人工审核',
+                        approved: false,
+                        description: '不可发布，请修改',
                         sensitiveHints: sensitiveHints,
                         canModify: false,
                         manualReview: true
@@ -1847,17 +1828,51 @@
                 }
                 
                 return {
-                    grade: 'B',
-                    description: '不通过，需要修改',
+                    approved: false,
+                    description: '不可发布，请修改',
                     sensitiveHints: sensitiveHints,
                     canModify: true,
                     modifyCount: bGradeModifyCount
                 };
             }
             
-            // C级内容
+            // 检查B级敏感词
+            for (let word of sensitiveWords['B级']) {
+                if (content.includes(word)) {
+                    isApproved = false;
+                    sensitiveHints.push('极端词');
+                    sensitiveHints.push('行业对比');
+                    break;
+                }
+            }
+            
+            if (!isApproved) {
+                // 需要修改的内容，增加修改次数
+                bGradeModifyCount++;
+                
+                // 如果修改次数已达到最大次数，自动进入人工审核
+                if (bGradeModifyCount > maxBGradeModifyCount) {
+                    return {
+                        approved: false,
+                        description: '不可发布，请修改',
+                        sensitiveHints: sensitiveHints,
+                        canModify: false,
+                        manualReview: true
+                    };
+                }
+                
+                return {
+                    approved: false,
+                    description: '不可发布，请修改',
+                    sensitiveHints: sensitiveHints,
+                    canModify: true,
+                    modifyCount: bGradeModifyCount
+                };
+            }
+            
+            // 可发布内容
             return {
-                grade: 'C',
+                approved: true,
                 description: '可发布',
                 sensitiveHints: [],
                 canModify: false
@@ -1872,13 +1887,13 @@
                 'B级': ['最好', '最厉害', '行业对比', '极端词']
             };
             
-            let grade = 'C'; // 默认C级
+            let isApproved = true; // 默认可发布
             let sensitiveHints = [];
             
             // 检查A级敏感词
             for (let word of sensitiveWords['A级']) {
                 if (content.includes(word)) {
-                    grade = 'A';
+                    isApproved = false;
                     // 根据具体敏感词类型设置提示
                     if (['长安街', '展销'].includes(word)) {
                         sensitiveHints.push('涉政敏感');
@@ -1896,35 +1911,16 @@
                 }
             }
             
-            // 如果已经是A级，直接返回
-            if (grade === 'A') {
-                return {
-                    grade: 'A',
-                    description: '禁止发布',
-                    sensitiveHints: sensitiveHints,
-                    canModify: false
-                };
-            }
-            
-            // 检查B级敏感词
-            for (let word of sensitiveWords['B级']) {
-                if (content.includes(word)) {
-                    grade = 'B';
-                    sensitiveHints.push('极端词');
-                    sensitiveHints.push('行业对比');
-                    break;
-                }
-            }
-            
-            if (grade === 'B') {
-                // B级内容，增加B级修改次数
+            // 如果已经检测到A级敏感词，需要修改
+            if (!isApproved) {
+                // 增加修改次数
                 mediaOutlineBGradeModifyCount++;
                 
-                // 如果B级修改次数已达到最大次数，自动进入人工审核
+                // 如果修改次数已达到最大次数，自动进入人工审核
                 if (mediaOutlineBGradeModifyCount > maxBGradeModifyCount) {
                     return {
-                        grade: 'B',
-                        description: '不通过，已进入人工审核',
+                        approved: false,
+                        description: '不可发布，请修改',
                         sensitiveHints: sensitiveHints,
                         canModify: false,
                         manualReview: true
@@ -1932,17 +1928,51 @@
                 }
                 
                 return {
-                    grade: 'B',
-                    description: '不通过，需要修改',
+                    approved: false,
+                    description: '不可发布，请修改',
                     sensitiveHints: sensitiveHints,
                     canModify: true,
                     modifyCount: mediaOutlineBGradeModifyCount
                 };
             }
             
-            // C级内容
+            // 检查B级敏感词
+            for (let word of sensitiveWords['B级']) {
+                if (content.includes(word)) {
+                    isApproved = false;
+                    sensitiveHints.push('极端词');
+                    sensitiveHints.push('行业对比');
+                    break;
+                }
+            }
+            
+            if (!isApproved) {
+                // 需要修改的内容，增加修改次数
+                mediaOutlineBGradeModifyCount++;
+                
+                // 如果修改次数已达到最大次数，自动进入人工审核
+                if (mediaOutlineBGradeModifyCount > maxBGradeModifyCount) {
+                    return {
+                        approved: false,
+                        description: '不可发布，请修改',
+                        sensitiveHints: sensitiveHints,
+                        canModify: false,
+                        manualReview: true
+                    };
+                }
+                
+                return {
+                    approved: false,
+                    description: '不可发布，请修改',
+                    sensitiveHints: sensitiveHints,
+                    canModify: true,
+                    modifyCount: mediaOutlineBGradeModifyCount
+                };
+            }
+            
+            // 可发布内容
             return {
-                grade: 'C',
+                approved: true,
                 description: '可发布',
                 sensitiveHints: [],
                 canModify: false
@@ -1957,13 +1987,13 @@
                 'B级': ['最好', '最厉害', '行业对比', '极端词']
             };
             
-            let grade = 'C'; // 默认C级
+            let isApproved = true; // 默认可发布
             let sensitiveHints = [];
             
             // 检查A级敏感词
             for (let word of sensitiveWords['A级']) {
                 if (content.includes(word)) {
-                    grade = 'A';
+                    isApproved = false;
                     // 根据具体敏感词类型设置提示
                     if (['长安街', '展销'].includes(word)) {
                         sensitiveHints.push('涉政敏感');
@@ -1981,35 +2011,16 @@
                 }
             }
             
-            // 如果已经是A级，直接返回
-            if (grade === 'A') {
-                return {
-                    grade: 'A',
-                    description: '禁止发布',
-                    sensitiveHints: sensitiveHints,
-                    canModify: false
-                };
-            }
-            
-            // 检查B级敏感词
-            for (let word of sensitiveWords['B级']) {
-                if (content.includes(word)) {
-                    grade = 'B';
-                    sensitiveHints.push('极端词');
-                    sensitiveHints.push('行业对比');
-                    break;
-                }
-            }
-            
-            if (grade === 'B') {
-                // B级内容，增加B级修改次数
+            // 如果已经检测到A级敏感词，需要修改
+            if (!isApproved) {
+                // 增加修改次数
                 externalSpeechBGradeModifyCount++;
                 
-                // 如果B级修改次数已达到最大次数，自动进入人工审核
+                // 如果修改次数已达到最大次数，自动进入人工审核
                 if (externalSpeechBGradeModifyCount > maxBGradeModifyCount) {
                     return {
-                        grade: 'B',
-                        description: '不通过，已进入人工审核',
+                        approved: false,
+                        description: '不可发布，请修改',
                         sensitiveHints: sensitiveHints,
                         canModify: false,
                         manualReview: true
@@ -2017,17 +2028,51 @@
                 }
                 
                 return {
-                    grade: 'B',
-                    description: '不通过，需要修改',
+                    approved: false,
+                    description: '不可发布，请修改',
                     sensitiveHints: sensitiveHints,
                     canModify: true,
                     modifyCount: externalSpeechBGradeModifyCount
                 };
             }
             
-            // C级内容
+            // 检查B级敏感词
+            for (let word of sensitiveWords['B级']) {
+                if (content.includes(word)) {
+                    isApproved = false;
+                    sensitiveHints.push('极端词');
+                    sensitiveHints.push('行业对比');
+                    break;
+                }
+            }
+            
+            if (!isApproved) {
+                // 需要修改的内容，增加修改次数
+                externalSpeechBGradeModifyCount++;
+                
+                // 如果修改次数已达到最大次数，自动进入人工审核
+                if (externalSpeechBGradeModifyCount > maxBGradeModifyCount) {
+                    return {
+                        approved: false,
+                        description: '不可发布，请修改',
+                        sensitiveHints: sensitiveHints,
+                        canModify: false,
+                        manualReview: true
+                    };
+                }
+                
+                return {
+                    approved: false,
+                    description: '不可发布，请修改',
+                    sensitiveHints: sensitiveHints,
+                    canModify: true,
+                    modifyCount: externalSpeechBGradeModifyCount
+                };
+            }
+            
+            // 可发布内容
             return {
-                grade: 'C',
+                approved: true,
                 description: '可发布',
                 sensitiveHints: [],
                 canModify: false
@@ -2040,43 +2085,8 @@
             reviewResult.innerHTML = '';
             reviewActions.innerHTML = '';
             
-            if (result.grade === 'A') {
-                // A级：禁止发布
-                const statusCard = document.createElement('div');
-                statusCard.className = 'bg-red-50 border-l-4 border-danger rounded-lg p-6 hover-scale review-card-shadow mb-5';
-                statusCard.innerHTML = `
-                    <div class="flex items-start">
-                        <div class="mr-4 mt-1">
-                            <i class="fa fa-ban text-danger text-2xl"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-semibold text-neutral-800">A级：禁止发布</h3>
-                            <p class="text-neutral-700 mt-2 text-base">内容涉及严重违规，禁止发布</p>
-                        </div>
-                    </div>
-                `;
-                reviewResult.appendChild(statusCard);
-                
-                // 敏感提示模块
-                if (result.sensitiveHints.length > 0) {
-                    const sensitiveCard = document.createElement('div');
-                    sensitiveCard.className = 'bg-red-50 border-l-4 border-danger rounded-lg p-6 hover-scale review-card-shadow mb-5';
-                    sensitiveCard.innerHTML = `
-                        <div class="flex items-start">
-                            <div class="mr-4 mt-1">
-                                <i class="fa fa-exclamation-triangle text-danger text-2xl"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-xl font-semibold text-neutral-800">敏感提示</h3>
-                                <p class="text-neutral-700 mt-2 text-base">涉及违规内容：<span class="text-danger font-medium">${result.sensitiveHints.join('</span>、<span class="text-danger font-medium">')}</span></p>
-                            </div>
-                        </div>
-                    `;
-                    reviewResult.appendChild(sensitiveCard);
-                }
-                
-            } else if (result.grade === 'B') {
-                // B级：不通过，需要修改
+            if (!result.approved) {
+                // 不可发布，请修改
                 const statusCard = document.createElement('div');
                 statusCard.className = 'bg-yellow-50 border-l-4 border-warning rounded-lg p-6 hover-scale review-card-shadow mb-5';
                 statusCard.innerHTML = `
@@ -2085,7 +2095,7 @@
                             <i class="fa fa-exclamation-triangle text-warning text-2xl"></i>
                         </div>
                         <div>
-                            <h3 class="text-xl font-semibold text-neutral-800">B级：不通过，需要修改</h3>
+                            <h3 class="text-xl font-semibold text-neutral-800">不可发布，请修改</h3>
                             <p class="text-neutral-700 mt-2 text-base">请根据下方提示调整内容后重新提交</p>
                         </div>
                     </div>
@@ -2140,30 +2150,7 @@
                 }
                 reviewResult.appendChild(countCard);
                 
-            } else if (result.grade === 'C') {
-                // C级：可发布
-                const statusCard = document.createElement('div');
-                statusCard.className = 'bg-green-50 border-l-4 border-success rounded-lg p-6 hover-scale review-card-shadow mb-5';
-                statusCard.innerHTML = `
-                    <div class="flex items-start">
-                        <div class="mr-4 mt-1">
-                            <i class="fa fa-check-circle text-success text-2xl"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-semibold text-neutral-800">C级：可发布</h3>
-                            <p class="text-neutral-700 mt-2 text-base">内容符合规范，可以发布</p>
-                        </div>
-                    </div>
-                `;
-                reviewResult.appendChild(statusCard);
-            }
-            
-            // 显示操作按钮
-            if (result.grade === 'A') {
-                // A级：禁止发布，无操作按钮
-                return;
-            } else if (result.grade === 'B') {
-                // B级：根据剩余次数显示不同按钮
+                // 显示操作按钮
                 if (result.manualReview) {
                     // 已进入人工审核，显示状态按钮
                     const manualReviewBtn = document.createElement('button');
@@ -2187,8 +2174,24 @@
                     };
                     reviewActions.appendChild(reinputBtn);
                 }
-            } else if (result.grade === 'C') {
-                // C级：显示确认发布按钮
+            } else {
+                // 可发布
+                const statusCard = document.createElement('div');
+                statusCard.className = 'bg-green-50 border-l-4 border-success rounded-lg p-6 hover-scale review-card-shadow mb-5';
+                statusCard.innerHTML = `
+                    <div class="flex items-start">
+                        <div class="mr-4 mt-1">
+                            <i class="fa fa-check-circle text-success text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-neutral-800">可发布</h3>
+                            <p class="text-neutral-700 mt-2 text-base">内容符合规范，可以发布</p>
+                        </div>
+                    </div>
+                `;
+                reviewResult.appendChild(statusCard);
+                
+                // 显示确认发布按钮
                 const confirmBtn = document.createElement('button');
                 confirmBtn.className = 'bg-success hover:bg-success/90 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 flex items-center justify-center hover-scale';
                 confirmBtn.innerHTML = '<i class="fa fa-check mr-2"></i>确认发布';
@@ -2196,10 +2199,10 @@
                     // 获取受访人输入框的值
                     const intervieweeInput = document.getElementById('interviewee-input');
                     const intervieweeValue = intervieweeInput ? intervieweeInput.value.trim() : '';
-                    const reviewGrade = result.grade === 'C';
+                    const reviewApproved = result.approved;
                     
-                    // 判断条件：受访人输入框值为"t1"且内审审核结果为"C级：可发布"
-                    if (intervieweeValue === 't1' && reviewGrade) {
+                    // 判断条件：受访人输入框值为"t1"且内审审核结果为"可发布"
+                    if (intervieweeValue === 't1' && reviewApproved) {
                         alert('内容已提交，已进入公关部审核流程');
                     } else {
                         alert('内容已提交，进入部门审核流程');
@@ -2218,43 +2221,8 @@
             reviewResult.innerHTML = '';
             reviewActions.innerHTML = '';
             
-            if (result.grade === 'A') {
-                // A级：禁止发布
-                const statusCard = document.createElement('div');
-                statusCard.className = 'bg-red-50 border-l-4 border-danger rounded-lg p-6 hover-scale review-card-shadow mb-5';
-                statusCard.innerHTML = `
-                    <div class="flex items-start">
-                        <div class="mr-4 mt-1">
-                            <i class="fa fa-ban text-danger text-2xl"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-semibold text-neutral-800">A级：禁止发布</h3>
-                            <p class="text-neutral-700 mt-2 text-base">内容涉及严重违规，禁止发布</p>
-                        </div>
-                    </div>
-                `;
-                reviewResult.appendChild(statusCard);
-                
-                // 敏感提示模块
-                if (result.sensitiveHints.length > 0) {
-                    const sensitiveCard = document.createElement('div');
-                    sensitiveCard.className = 'bg-red-50 border-l-4 border-danger rounded-lg p-6 hover-scale review-card-shadow mb-5';
-                    sensitiveCard.innerHTML = `
-                        <div class="flex items-start">
-                            <div class="mr-4 mt-1">
-                                <i class="fa fa-exclamation-triangle text-danger text-2xl"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-xl font-semibold text-neutral-800">敏感提示</h3>
-                                <p class="text-neutral-700 mt-2 text-base">涉及违规内容：<span class="text-danger font-medium">${result.sensitiveHints.join('</span>、<span class="text-danger font-medium">')}</span></p>
-                            </div>
-                        </div>
-                    `;
-                    reviewResult.appendChild(sensitiveCard);
-                }
-                
-            } else if (result.grade === 'B') {
-                // B级：不通过，需要修改
+            if (!result.approved) {
+                // 不可发布，请修改
                 const statusCard = document.createElement('div');
                 statusCard.className = 'bg-yellow-50 border-l-4 border-warning rounded-lg p-6 hover-scale review-card-shadow mb-5';
                 statusCard.innerHTML = `
@@ -2263,7 +2231,7 @@
                             <i class="fa fa-exclamation-triangle text-warning text-2xl"></i>
                         </div>
                         <div>
-                            <h3 class="text-xl font-semibold text-neutral-800">B级：不通过，需要修改</h3>
+                            <h3 class="text-xl font-semibold text-neutral-800">不可发布，请修改</h3>
                             <p class="text-neutral-700 mt-2 text-base">请根据下方提示调整内容后重新提交</p>
                         </div>
                     </div>
@@ -2318,30 +2286,7 @@
                 }
                 reviewResult.appendChild(countCard);
                 
-            } else if (result.grade === 'C') {
-                // C级：可发布
-                const statusCard = document.createElement('div');
-                statusCard.className = 'bg-green-50 border-l-4 border-success rounded-lg p-6 hover-scale review-card-shadow mb-5';
-                statusCard.innerHTML = `
-                    <div class="flex items-start">
-                        <div class="mr-4 mt-1">
-                            <i class="fa fa-check-circle text-success text-2xl"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-semibold text-neutral-800">C级：可发布</h3>
-                            <p class="text-neutral-700 mt-2 text-base">内容符合规范，可以发布</p>
-                        </div>
-                    </div>
-                `;
-                reviewResult.appendChild(statusCard);
-            }
-            
-            // 显示操作按钮
-            if (result.grade === 'A') {
-                // A级：禁止发布，无操作按钮
-                return;
-            } else if (result.grade === 'B') {
-                // B级：根据剩余次数显示不同按钮
+                // 显示操作按钮
                 if (result.manualReview) {
                     // 已进入人工审核，显示状态按钮
                     const manualReviewBtn = document.createElement('button');
@@ -2365,8 +2310,24 @@
                     };
                     reviewActions.appendChild(reinputBtn);
                 }
-            } else if (result.grade === 'C') {
-                // C级：显示确认发布按钮
+            } else {
+                // 可发布
+                const statusCard = document.createElement('div');
+                statusCard.className = 'bg-green-50 border-l-4 border-success rounded-lg p-6 hover-scale review-card-shadow mb-5';
+                statusCard.innerHTML = `
+                    <div class="flex items-start">
+                        <div class="mr-4 mt-1">
+                            <i class="fa fa-check-circle text-success text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-neutral-800">可发布</h3>
+                            <p class="text-neutral-700 mt-2 text-base">内容符合规范，可以发布</p>
+                        </div>
+                    </div>
+                `;
+                reviewResult.appendChild(statusCard);
+                
+                // 显示确认发布按钮
                 const confirmBtn = document.createElement('button');
                 confirmBtn.className = 'bg-success hover:bg-success/90 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 flex items-center justify-center hover-scale';
                 confirmBtn.innerHTML = '<i class="fa fa-check mr-2"></i>确认发布';
@@ -2374,10 +2335,10 @@
                     // 获取受访人输入框的值
                     const intervieweeInput = document.getElementById('interviewee-input');
                     const intervieweeValue = intervieweeInput ? intervieweeInput.value.trim() : '';
-                    const reviewGrade = result.grade === 'C';
+                    const reviewApproved = result.approved;
                     
-                    // 判断条件：受访人输入框值为"t1"且内审审核结果为"C级：可发布"
-                    if (intervieweeValue === 't1' && reviewGrade) {
+                    // 判断条件：受访人输入框值为"t1"且内审审核结果为"可发布"
+                    if (intervieweeValue === 't1' && reviewApproved) {
                         alert('内容已提交，已进入公关部审核流程');
                     } else {
                         alert('内容已提交，进入部门审核流程');
@@ -2396,43 +2357,8 @@
             reviewResult.innerHTML = '';
             reviewActions.innerHTML = '';
             
-            if (result.grade === 'A') {
-                // A级：禁止发布
-                const statusCard = document.createElement('div');
-                statusCard.className = 'bg-red-50 border-l-4 border-danger rounded-lg p-6 hover-scale review-card-shadow mb-5';
-                statusCard.innerHTML = `
-                    <div class="flex items-start">
-                        <div class="mr-4 mt-1">
-                            <i class="fa fa-ban text-danger text-2xl"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-semibold text-neutral-800">A级：禁止发布</h3>
-                            <p class="text-neutral-700 mt-2 text-base">内容涉及严重违规，禁止发布</p>
-                        </div>
-                    </div>
-                `;
-                reviewResult.appendChild(statusCard);
-                
-                // 敏感提示模块
-                if (result.sensitiveHints.length > 0) {
-                    const sensitiveCard = document.createElement('div');
-                    sensitiveCard.className = 'bg-red-50 border-l-4 border-danger rounded-lg p-6 hover-scale review-card-shadow mb-5';
-                    sensitiveCard.innerHTML = `
-                        <div class="flex items-start">
-                            <div class="mr-4 mt-1">
-                                <i class="fa fa-exclamation-triangle text-danger text-2xl"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-xl font-semibold text-neutral-800">敏感提示</h3>
-                                <p class="text-neutral-700 mt-2 text-base">涉及违规内容：<span class="text-danger font-medium">${result.sensitiveHints.join('</span>、<span class="text-danger font-medium">')}</span></p>
-                            </div>
-                        </div>
-                    `;
-                    reviewResult.appendChild(sensitiveCard);
-                }
-                
-            } else if (result.grade === 'B') {
-                // B级：不通过，需要修改
+            if (!result.approved) {
+                // 不可发布，请修改
                 const statusCard = document.createElement('div');
                 statusCard.className = 'bg-yellow-50 border-l-4 border-warning rounded-lg p-6 hover-scale review-card-shadow mb-5';
                 statusCard.innerHTML = `
@@ -2441,7 +2367,7 @@
                             <i class="fa fa-exclamation-triangle text-warning text-2xl"></i>
                         </div>
                         <div>
-                            <h3 class="text-xl font-semibold text-neutral-800">B级：不通过，需要修改</h3>
+                            <h3 class="text-xl font-semibold text-neutral-800">不可发布，请修改</h3>
                             <p class="text-neutral-700 mt-2 text-base">请根据下方提示调整内容后重新提交</p>
                         </div>
                     </div>
@@ -2496,30 +2422,7 @@
                 }
                 reviewResult.appendChild(countCard);
                 
-            } else if (result.grade === 'C') {
-                // C级：可发布
-                const statusCard = document.createElement('div');
-                statusCard.className = 'bg-green-50 border-l-4 border-success rounded-lg p-6 hover-scale review-card-shadow mb-5';
-                statusCard.innerHTML = `
-                    <div class="flex items-start">
-                        <div class="mr-4 mt-1">
-                            <i class="fa fa-check-circle text-success text-2xl"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-semibold text-neutral-800">C级：可发布</h3>
-                            <p class="text-neutral-700 mt-2 text-base">内容符合规范，可以发布</p>
-                        </div>
-                    </div>
-                `;
-                reviewResult.appendChild(statusCard);
-            }
-            
-            // 显示操作按钮
-            if (result.grade === 'A') {
-                // A级：禁止发布，无操作按钮
-                return;
-            } else if (result.grade === 'B') {
-                // B级：根据剩余次数显示不同按钮
+                // 显示操作按钮
                 if (result.manualReview) {
                     // 已进入人工审核，显示状态按钮
                     const manualReviewBtn = document.createElement('button');
@@ -2543,8 +2446,24 @@
                     };
                     reviewActions.appendChild(reinputBtn);
                 }
-            } else if (result.grade === 'C') {
-                // C级：显示确认发布按钮
+            } else {
+                // 可发布
+                const statusCard = document.createElement('div');
+                statusCard.className = 'bg-green-50 border-l-4 border-success rounded-lg p-6 hover-scale review-card-shadow mb-5';
+                statusCard.innerHTML = `
+                    <div class="flex items-start">
+                        <div class="mr-4 mt-1">
+                            <i class="fa fa-check-circle text-success text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-neutral-800">可发布</h3>
+                            <p class="text-neutral-700 mt-2 text-base">内容符合规范，可以发布</p>
+                        </div>
+                    </div>
+                `;
+                reviewResult.appendChild(statusCard);
+                
+                // 显示确认发布按钮
                 const confirmBtn = document.createElement('button');
                 confirmBtn.className = 'bg-success hover:bg-success/90 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 flex items-center justify-center hover-scale';
                 confirmBtn.innerHTML = '<i class="fa fa-check mr-2"></i>确认发布';
@@ -2552,10 +2471,10 @@
                     // 获取发言人输入框的值
                     const speakerInput = document.getElementById('speaker-input');
                     const speakerValue = speakerInput ? speakerInput.value.trim() : '';
-                    const reviewGrade = result.grade === 'C';
+                    const reviewApproved = result.approved;
                     
-                    // 判断条件：发言人输入框值为"t1"且内审审核结果为"C级：可发布"
-                    if (speakerValue === 't1' && reviewGrade) {
+                    // 判断条件：发言人输入框值为"t1"且内审审核结果为"可发布"
+                    if (speakerValue === 't1' && reviewApproved) {
                         alert('内容已提交，已进入公关部审核流程');
                     } else {
                         alert('内容已提交，已进入部门流程');
