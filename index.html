@@ -221,6 +221,12 @@
             margin-right: 4px;
         }
 
+        .attendance-only-tip {
+            color: #ff4d4f;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
         .radio-group {
             display: flex;
             gap: 20px;
@@ -989,23 +995,30 @@
                                 <label for="external-content-ppt">PPT/Keynote/视频</label>
                             </div>
                             <div class="radio-item">
-                                <input type="radio" id="external-content-text-image" name="external-content-format" value="text-image">
-                                <label for="external-content-text-image">文字</label>
+                                <input type="radio" id="external-content-text" name="external-content-format" value="text-image">
+                                <label for="external-content-text">文字</label>
                             </div>
+                            <div class="radio-item">
+                                <input type="radio" id="external-content-attendance-only" name="external-content-format" value="attendance-only">
+                                <label for="external-content-attendance-only">仅参会</label>
+                            </div>
+                        </div>
+                        <div class="attendance-only-tip" id="attendance-only-tip" style="display: none;">
+                            仅需提交对外发言审批流
                         </div>
                     </div>
 
                     <!-- 发言人和发言人部门行 -->
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label">
-                                <span class="required">*</span>发言人
+                            <label class="form-label" id="speaker-label">
+                                <span class="required">*</span>参会人
                             </label>
                             <input type="text" class="form-input" id="speaker-input" placeholder="请选择">
                         </div>
                         <div class="form-group">
-                            <label class="form-label">
-                                <span class="required">*</span>发言人部门
+                            <label class="form-label" id="speaker-department-label">
+                                <span class="required">*</span>参会人部门
                             </label>
                             <input type="text" class="form-input" placeholder="请选择">
                         </div>
@@ -1088,8 +1101,21 @@
                                 <label for="external-speech-no">否</label>
                             </div>
                         </div>
-                        <div class="explanation red-text">
-                            发言包括（1）演讲、授课;（2）接受媒体采访,包含但不限于书面、电话和视频采访
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span class="required">*</span>是否有报道
+                        </label>
+                        <div class="radio-group">
+                            <div class="radio-item">
+                                <input type="radio" id="external-report-yes" name="external-report" value="yes">
+                                <label for="external-report-yes">是</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="external-report-no" name="external-report" value="no">
+                                <label for="external-report-no">否</label>
+                            </div>
                         </div>
                     </div>
 
@@ -1109,37 +1135,9 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="form-label">
-                            <span class="required">*</span>是否有报道
-                        </label>
-                        <div class="radio-group">
-                            <div class="radio-item">
-                                <input type="radio" id="external-report-yes" name="external-report" value="yes">
-                                <label for="external-report-yes">是</label>
-                            </div>
-                            <div class="radio-item">
-                                <input type="radio" id="external-report-no" name="external-report" value="no">
-                                <label for="external-report-no">否</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="upload-section">
-                        <label class="form-label">附件</label>
-                        <button type="button" class="upload-btn">
-                            点击上传
-                        </button>
-                        <div class="upload-instructions">
-                            <div>最大支持上传30个文件,单个文件大小不超过100MB</div>
-                            <br>
-                            <div class="red-text">邀请函、会议介绍、发言稿、发言PPT或Keynote等</div>
-                        </div>
-                    </div>
-
                     <!-- AI模型弹窗区域 -->
                     <div class="text-input-section" id="external-speech-ai-section" style="display: none;">
-                        <div class="text-input-title">输入信息</div>
+                        <div class="text-input-title">你的回答内容</div>
                         <div class="text-input-container">
                             <textarea class="text-input-area" id="external-speech-textarea" placeholder="请输入要发布的内容..."></textarea>
                         </div>
@@ -1248,96 +1246,19 @@
                         </div>
                     </div>
 
-                    <!-- 采访主题行 -->
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">
-                                <span class="required">*</span>采访主题
-                            </label>
-                            <select class="platform-select">
-                                <option value="">请选择主题</option>
-                                <option value="enterprise-brand">企业与品牌</option>
-                                <option value="product-tech">产品技术</option>
-                                <option value="service-policy">服务与政策</option>
-                            </select>
-                        </div>
-                    </div>
-
                     <!-- 参会时间和媒体名称行 -->
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label">
-                                <span class="required">*</span>媒体来源/渠道
+                                <span class="required">*</span>采访背景
                             </label>
                             <input type="text" class="form-input" placeholder="请输入">
                         </div>
                     </div>
                     
-                    <!-- 文字形式的提纲选项 -->
-                    <div class="form-row" id="text-outline-section" style="display: none;">
-                        <div class="form-group">
-                            <label class="form-label">
-                                <span class="required">*</span>是否有提纲
-                            </label>
-                            <div class="radio-group">
-                                <div class="radio-item">
-                                    <input type="radio" id="text-outline-yes" name="text-outline" value="yes">
-                                    <label for="text-outline-yes">是</label>
-                                </div>
-                                <div class="radio-item">
-                                    <input type="radio" id="text-outline-no" name="text-outline" value="no">
-                                    <label for="text-outline-no">否</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 视频形式的脚本选项 -->
-                    <div class="form-row" id="video-script-section" style="display: none;">
-                        <div class="form-group">
-                            <label class="form-label">
-                                <span class="required">*</span>是否有采访脚本
-                            </label>
-                            <div class="radio-group">
-                                <div class="radio-item">
-                                    <input type="radio" id="video-script-yes" name="video-script" value="yes">
-                                    <label for="video-script-yes">是</label>
-                                </div>
-                                <div class="radio-item">
-                                    <input type="radio" id="video-script-no" name="video-script" value="no">
-                                    <label for="video-script-no">否</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 文字形式-否：附件上传组件 -->
-                    <div class="upload-section" id="text-outline-attachment-section" style="display: none;">
-                        <label class="form-label">附件上传</label>
-                        <button type="button" class="upload-btn">
-                            点击上传
-                        </button>
-                        <div class="upload-instructions">
-                            <div>最大支持上传20个文件,单个文件大小不超过100MB</div>
-                        </div>
-                    </div>
-
-                    <!-- 视频形式-否：附件上传组件 -->
-                    <div class="upload-section" id="video-script-attachment-section" style="display: none;">
-                        <label class="form-label">附件</label>
-                        <button type="button" class="upload-btn">
-                            点击上传
-                        </button>
-                        <div class="upload-instructions">
-                            <div>最大支持上传30个文件,单个文件大小不超过100MB</div>
-                            <br><br>
-                            <div class="red-text">请上传附件</div>
-                        </div>
-                    </div>
-
                     <!-- AI模型弹窗区域 -->
                     <div class="text-input-section" id="media-outline-ai-section" style="display: none;">
-                        <div class="text-input-title">输入信息</div>
+                        <div class="text-input-title">你的回答内容</div>
                         <div class="text-input-container">
                             <textarea class="text-input-area" id="media-outline-textarea" placeholder="请输入要发布的内容..."></textarea>
                         </div>
@@ -1373,6 +1294,24 @@
                                 运行
                             </button>
                         </div>
+                    </div>
+
+                    <!-- 视频上传区域（仅视频形式显示） -->
+                    <div class="upload-section" id="video-upload-section" style="display: none;">
+                        <label class="form-label">视频附件</label>
+                        <button type="button" class="upload-btn" id="video-upload-btn">
+                            <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17,14 12,9 7,14"></polyline>
+                                <line x1="12" y1="9" x2="12" y2="21"></line>
+                            </svg>
+                            从本地上传
+                        </button>
+                        <br><br>
+                        <div class="upload-instructions">
+                            <div>支持上传视频文件，单个文件大小不超过500MB</div>
+                        </div>
+                        <input type="file" id="video-file-input" accept="video/*" style="display: none;">
                     </div>
 
                     <!-- 媒体采访内容审核结果区域 -->
@@ -1441,24 +1380,14 @@
 
             // 采访形式条件逻辑
             const contentFormatRadios = document.querySelectorAll('input[name="content-format"]');
-            const textOutlineSection = document.getElementById('text-outline-section');
-            const videoScriptSection = document.getElementById('video-script-section');
-            const textOutlineAttachmentSection = document.getElementById('text-outline-attachment-section');
-            const videoScriptAttachmentSection = document.getElementById('video-script-attachment-section');
             const mediaOutlineAISection = document.getElementById('media-outline-ai-section');
+            const videoUploadSection = document.getElementById('video-upload-section');
 
             // 处理采访形式选择变化
             function handleContentFormatChange(selectedFormat) {
-                // 先隐藏所有相关组件
-                textOutlineSection.style.display = 'none';
-                videoScriptSection.style.display = 'none';
-                textOutlineAttachmentSection.style.display = 'none';
-                videoScriptAttachmentSection.style.display = 'none';
+                // 先隐藏AI模型区域和视频上传区域
                 mediaOutlineAISection.style.display = 'none';
-                
-                // 重置所有单选按钮
-                document.querySelectorAll('input[name="text-outline"]').forEach(radio => radio.checked = false);
-                document.querySelectorAll('input[name="video-script"]').forEach(radio => radio.checked = false);
+                videoUploadSection.style.display = 'none';
                 
                 // 隐藏审核结果区域
                 const reviewSection = document.getElementById('media-outline-review-section');
@@ -1469,13 +1398,31 @@
                 mediaOutlineRunCount = 0;
                 mediaOutlineBGradeModifyCount = 0;
 
-                // 根据选择显示相应的单选组
-                if (selectedFormat === 'text-image') {
-                    // 文字形式：显示"是否有提纲"单选组
-                    textOutlineSection.style.display = 'block';
-                } else if (selectedFormat === 'video') {
-                    // 视频形式：显示"是否有采访脚本？"单选组
-                    videoScriptSection.style.display = 'block';
+                // 根据选择直接显示AI模型区域
+                if (selectedFormat === 'text-image' || selectedFormat === 'video') {
+                    // 文字形式或视频形式：直接显示AI模型区域
+                    mediaOutlineAISection.style.display = 'block';
+                    // 添加淡入动画
+                    mediaOutlineAISection.style.opacity = '0';
+                    mediaOutlineAISection.style.transform = 'translateY(20px)';
+                    setTimeout(() => {
+                        mediaOutlineAISection.style.transition = 'all 0.3s ease-out';
+                        mediaOutlineAISection.style.opacity = '1';
+                        mediaOutlineAISection.style.transform = 'translateY(0)';
+                    }, 50);
+
+                    // 如果是视频形式，显示视频上传区域
+                    if (selectedFormat === 'video') {
+                        videoUploadSection.style.display = 'block';
+                        // 添加淡入动画
+                        videoUploadSection.style.opacity = '0';
+                        videoUploadSection.style.transform = 'translateY(20px)';
+                        setTimeout(() => {
+                            videoUploadSection.style.transition = 'all 0.3s ease-out';
+                            videoUploadSection.style.opacity = '1';
+                            videoUploadSection.style.transform = 'translateY(0)';
+                        }, 100);
+                    }
                 }
             }
 
@@ -1488,85 +1435,36 @@
                 });
             });
 
-            // 文字形式-是否有提纲事件监听
-            const textOutlineRadios = document.querySelectorAll('input[name="text-outline"]');
-            textOutlineRadios.forEach(radio => {
-                radio.addEventListener('change', function() {
-                    if (this.value === 'yes' && this.checked) {
-                        // 选择"是"：显示AI输入框，隐藏附件上传
-                        textOutlineAttachmentSection.style.display = 'none';
-                        mediaOutlineAISection.style.display = 'block';
-                        // 添加淡入动画
-                        mediaOutlineAISection.style.opacity = '0';
-                        mediaOutlineAISection.style.transform = 'translateY(20px)';
-                        setTimeout(() => {
-                            mediaOutlineAISection.style.transition = 'all 0.3s ease-out';
-                            mediaOutlineAISection.style.opacity = '1';
-                            mediaOutlineAISection.style.transform = 'translateY(0)';
-                        }, 50);
-                    } else if (this.value === 'no' && this.checked) {
-                        // 选择"否"：显示附件上传组件，隐藏AI输入框
-                        mediaOutlineAISection.style.display = 'none';
-                        textOutlineAttachmentSection.style.display = 'block';
-                        // 添加淡入动画
-                        textOutlineAttachmentSection.style.opacity = '0';
-                        textOutlineAttachmentSection.style.transform = 'translateY(20px)';
-                        setTimeout(() => {
-                            textOutlineAttachmentSection.style.transition = 'all 0.3s ease-out';
-                            textOutlineAttachmentSection.style.opacity = '1';
-                            textOutlineAttachmentSection.style.transform = 'translateY(0)';
-                        }, 50);
-                        // 同时隐藏审核结果区域
-                        const reviewSection = document.getElementById('media-outline-review-section');
-                        if (reviewSection) {
-                            reviewSection.style.display = 'none';
-                        }
-                        // 重置计数器
-                        mediaOutlineRunCount = 0;
-                        mediaOutlineBGradeModifyCount = 0;
-                    }
+            // 视频上传按钮事件监听
+            const videoUploadBtn = document.getElementById('video-upload-btn');
+            const videoFileInput = document.getElementById('video-file-input');
+            
+            if (videoUploadBtn && videoFileInput) {
+                videoUploadBtn.addEventListener('click', function() {
+                    videoFileInput.click();
                 });
-            });
 
-            // 视频形式-是否有采访脚本事件监听
-            const videoScriptRadios = document.querySelectorAll('input[name="video-script"]');
-            videoScriptRadios.forEach(radio => {
-                radio.addEventListener('change', function() {
-                    if (this.value === 'yes' && this.checked) {
-                        // 选择"是"：显示AI输入框，隐藏附件上传
-                        videoScriptAttachmentSection.style.display = 'none';
-                        mediaOutlineAISection.style.display = 'block';
-                        // 添加淡入动画
-                        mediaOutlineAISection.style.opacity = '0';
-                        mediaOutlineAISection.style.transform = 'translateY(20px)';
-                        setTimeout(() => {
-                            mediaOutlineAISection.style.transition = 'all 0.3s ease-out';
-                            mediaOutlineAISection.style.opacity = '1';
-                            mediaOutlineAISection.style.transform = 'translateY(0)';
-                        }, 50);
-                    } else if (this.value === 'no' && this.checked) {
-                        // 选择"否"：显示附件上传组件，隐藏AI输入框
-                        mediaOutlineAISection.style.display = 'none';
-                        videoScriptAttachmentSection.style.display = 'block';
-                        // 添加淡入动画
-                        videoScriptAttachmentSection.style.opacity = '0';
-                        videoScriptAttachmentSection.style.transform = 'translateY(20px)';
-                        setTimeout(() => {
-                            videoScriptAttachmentSection.style.transition = 'all 0.3s ease-out';
-                            videoScriptAttachmentSection.style.opacity = '1';
-                            videoScriptAttachmentSection.style.transform = 'translateY(0)';
-                        }, 50);
-                        // 同时隐藏审核结果区域
-                        const reviewSection = document.getElementById('media-outline-review-section');
-                        if (reviewSection) {
-                            reviewSection.style.display = 'none';
+                videoFileInput.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        // 检查文件大小（500MB）
+                        const maxSize = 500 * 1024 * 1024; // 500MB in bytes
+                        if (file.size > maxSize) {
+                            alert('文件大小不能超过500MB');
+                            e.target.value = ''; // 清空选择
+                            return;
                         }
-                        // 重置计数器
-                        mediaOutlineRunCount = 0;
-                        mediaOutlineBGradeModifyCount = 0;
+                        // 检查文件类型
+                        if (!file.type.startsWith('video/')) {
+                            alert('请选择视频文件');
+                            e.target.value = ''; // 清空选择
+                            return;
+                        }
+                        // 可以在这里添加文件上传处理逻辑
+                        console.log('选择的视频文件:', file.name, '大小:', (file.size / 1024 / 1024).toFixed(2), 'MB');
                     }
                 });
-            });
+            }
 
             // 见刊说明区域显示/隐藏逻辑
             const mediaPresentRadios = document.querySelectorAll('input[name="media-present"]');
@@ -1624,6 +1522,47 @@
                     }
                 });
             });
+
+            // 对外发言"发言形式"选择事件监听 - 动态更改标签文本
+            const externalContentFormatRadios = document.querySelectorAll('input[name="external-content-format"]');
+            const speakerLabel = document.getElementById('speaker-label');
+            const speakerDepartmentLabel = document.getElementById('speaker-department-label');
+            
+            function updateSpeakerLabels(format) {
+                const attendanceOnlyTip = document.getElementById('attendance-only-tip');
+                if (format === 'attendance-only') {
+                    // 仅参会：显示"参会人"和"参会人部门"
+                    speakerLabel.innerHTML = '<span class="required">*</span>参会人';
+                    speakerDepartmentLabel.innerHTML = '<span class="required">*</span>参会人部门';
+                    // 显示提示
+                    if (attendanceOnlyTip) {
+                        attendanceOnlyTip.style.display = 'block';
+                    }
+                } else {
+                    // PPT/Keynote/视频 或 文字：显示"发言人"和"发言人部门"
+                    speakerLabel.innerHTML = '<span class="required">*</span>发言人';
+                    speakerDepartmentLabel.innerHTML = '<span class="required">*</span>发言人部门';
+                    // 隐藏提示
+                    if (attendanceOnlyTip) {
+                        attendanceOnlyTip.style.display = 'none';
+                    }
+                }
+            }
+
+            // 为发言形式单选按钮添加事件监听
+            externalContentFormatRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.checked) {
+                        updateSpeakerLabels(this.value);
+                    }
+                });
+            });
+
+            // 初始化：检查默认选中的发言形式
+            const checkedFormat = document.querySelector('input[name="external-content-format"]:checked');
+            if (checkedFormat) {
+                updateSpeakerLabels(checkedFormat.value);
+            }
         });
 
         // 内容审核逻辑
